@@ -123,7 +123,7 @@ namespace SwgohHelpApiTests
         public void FetchSquads()
         {
             var options = new RequestOptions();
-            var squads = helper.fetchSquads(options);
+            var squads = helper.FetchSquadsJsonString(options);
             TestContext.Write(squads);
             //Assert.AreEqual("Perimeter Patrol", guild[0].name);
         }
@@ -133,7 +133,7 @@ namespace SwgohHelpApiTests
         {
             var options = new RequestOptions();
             
-            var zetas = helper.fetchZetas(options);
+            var zetas = helper.FetchZetasJsonString(options);
             TestContext.Write(zetas);
             //Assert.AreEqual("Perimeter Patrol", guild[0].name);
         }
@@ -153,7 +153,7 @@ namespace SwgohHelpApiTests
         }
 
         [Test]
-        public void FetchUnitsData()
+        public void FetchLocalizedUnitsData()
         {
             dynamic match = new ExpandoObject();
             match.rarity = 7;
@@ -174,9 +174,9 @@ namespace SwgohHelpApiTests
                 match = match,
                 project = project
             };
+            TestContext.Write(helper.fetchData(options));
+            //var unitsData = JsonConvert.DeserializeObject<List<Unit>>(helper.fetchData(options));
 
-            var unitsData = JsonConvert.DeserializeObject<List<Unit>>(helper.fetchData(options));
-            
             //Assert.AreEqual("basicskill_ARC170CLONESERGEANT", skillData[0].id);
         }
 

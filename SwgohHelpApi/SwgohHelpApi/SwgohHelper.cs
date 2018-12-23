@@ -20,6 +20,11 @@ namespace SwgohHelpApi
         public static string Token { get; set; }
         private string User { get; set; }
         
+        public SwgohHelper()
+        {
+
+        }
+
         public SwgohHelper(UserSettings settings)
         {
 
@@ -47,9 +52,9 @@ namespace SwgohHelpApi
                 var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(response.Content.ReadAsStringAsync().Result);
                 Token = "Bearer " + loginResponse.AccessToken + "";
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
+                throw;
             }
 
         }
@@ -77,9 +82,9 @@ namespace SwgohHelpApi
                 return JsonConvert.DeserializeObject<List<T>>(response.Content.ReadAsStringAsync().Result);
 
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
+                throw;
             }
         }
 
@@ -93,13 +98,12 @@ namespace SwgohHelpApi
         {
             try
             {
-                
                 var response = url.WithHeaders(new { Content_Type = "application/json", Authorization = Token }).PostJsonAsync(param).Result;
                 return response.Content.ReadAsStringAsync().Result;
             }
-            catch (Exception e)
+            catch
             {
-                throw e;
+                throw;
             }
         }
 
@@ -117,21 +121,59 @@ namespace SwgohHelpApi
             return response;
         }
 
+        public string fetchUnitJsonString(RequestOptions options)
+        {
+            var response = this.fetchApi(ServiceUri.Units, options);
+
+            return response;
+        }
+
+        public string fetchLocalizedUnitJsonString(RequestOptions options)
+        {
+            return fetchApi(ServiceUri.Data, options);
+        }
+
         public List<Player> fetchPlayers(RequestOptions options)
         {
-            var response = this.fetchApi(ServiceUri.Player, options);
+            var response = fetchPlayersJsonString(options);
 
             return JsonConvert.DeserializeObject<List<Player>>(response);
         }
 
-        public string fetchZetas(RequestOptions options)
+        public List<LocalizedUnit> FetchLocalizedUnits()
+        {
+            dynamic match = new ExpandoObject();
+            match.rarity = 7;
+
+            dynamic project = new ExpandoObject();
+            project.baseId = 7;
+            project.nameKey = 1;
+            project.descKey = 1;
+            project.forceAlignment = 1;
+            project.categoryIdList = 1;
+            project.combatType = 1;
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                language = "eng_us",
+                enums = true,
+                match = match,
+                project = project
+            };
+            var response = fetchLocalizedUnitJsonString(options);
+
+            return JsonConvert.DeserializeObject<List<LocalizedUnit>>(response);
+        }
+
+        public string FetchZetasJsonString(RequestOptions options)
         {
             var response = this.fetchApi(ServiceUri.Zetas, options);
 
             return response;
         }
 
-        public string fetchSquads(RequestOptions options)
+        public string FetchSquadsJsonString(RequestOptions options)
         {
             var response = this.fetchApi(ServiceUri.Squads, options);
 
@@ -170,7 +212,7 @@ namespace SwgohHelpApi
 
         public string fetchUnits(RequestOptions options)
         {
-            var response = this.fetchApi(ServiceUri.Units, options);
+            var response = fetchUnitJsonString(options);
 
             return response;
 
@@ -178,7 +220,7 @@ namespace SwgohHelpApi
 
         public List<Guild> fetchGuild(RequestOptions options)
         {
-            var response = this.fetchApi(ServiceUri.Guild, options);
+            var response = fetchGuildJsonString(options);
 
             return JsonConvert.DeserializeObject<List<Guild>>(response);
         }

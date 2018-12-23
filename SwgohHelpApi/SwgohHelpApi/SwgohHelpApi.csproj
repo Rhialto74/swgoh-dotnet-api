@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="model\LocalizedUnit\LocalizedUnit.cs" />
     <Compile Include="model\Player\Char.cs" />
     <Compile Include="model\Player\Crew.cs" />
     <Compile Include="model\Player\Equipped.cs" />

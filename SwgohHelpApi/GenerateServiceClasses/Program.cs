@@ -10,7 +10,7 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 using SwgohHelpApi;
 using SwgohHelpApi.Model;
 using CommandLine;
-
+using System.Dynamic;
 
 namespace GenerateServiceClasses
 {
@@ -18,6 +18,7 @@ namespace GenerateServiceClasses
     {
         private const string testUsername = "Rhialto";
         private const string testPassword = "gm1oB4GCigeqyr0kB8G6APqjHk2DvoXXI4rfxXgo";
+        private static SwgohHelper helper;
 
         public class Options
         {
@@ -26,6 +27,12 @@ namespace GenerateServiceClasses
 
             [Option('g', "guild", Required = false, HelpText = "Generate Guild Classes.")]
             public bool Guild { get; set; }
+
+            [Option('t', "punit", Required = false, HelpText = "Generate Player Unit Classes.")]
+            public bool PUnit { get; set; }
+
+            [Option('u', "unit", Required = false, HelpText = "Generate Localized Unit Classes.")]
+            public bool Unit { get; set; }
 
             [Option('f', "filename", Default = "", Required = false, HelpText = "Parses JSON from a file. Other options are ignored when using this option.")]
             public string FileName { get; set; }
@@ -55,6 +62,16 @@ namespace GenerateServiceClasses
                                Console.WriteLine($"Generating Guild Classes");
                                GenerateGuild();
                            }
+                           if (o.PUnit)
+                           {
+                               Console.WriteLine($"Generating Player Unit Classes");
+                               GeneratePlayerUnit();
+                           }
+                           if (o.Unit)
+                           {
+                               Console.WriteLine($"Generating Localized Unit Classes");
+                               GenerateUnit();
+                           }
                            else
                            {
                                Console.WriteLine($"Current Arguments: -p {o.Player}");
@@ -64,11 +81,25 @@ namespace GenerateServiceClasses
                        
                    });
         }
+        private static void LogIn()
+        {
+            helper = new SwgohHelper(new UserSettings() { Username = testUsername, Password = testPassword, Debug = "true" });
+            helper.Login();
+        }
 
+        private static void GenerateFromFile(string filename)
+        {
+            LogIn();
+            using (StreamReader reader = File.OpenText(filename))
+            {
+                var classgen = Prepare(reader.ReadToEnd());
+                classgen.GenerateClasses();
+            }
+        }
+        
         private static void GeneratePlayer()
         {
-            var helper = new SwgohHelper(new UserSettings() { Username = testUsername, Password = testPassword, Debug = "true" });
-            helper.Login();
+            LogIn();
             var options = new RequestOptions
             {
                 allycodes = new List<int>() { 999531726 },
@@ -78,19 +109,9 @@ namespace GenerateServiceClasses
             var data = helper.fetchPlayersJsonString(options);
             Prepare(data, "Player").GenerateClasses();
         }
-        private static void GenerateFromFile(string filename)
-        {
-            using (StreamReader reader = File.OpenText(filename))
-            {
-                var classgen = Prepare(reader.ReadToEnd());
-                classgen.GenerateClasses();
-            }
-        }
-
         private static void GenerateGuild()
         {
-            var helper = new SwgohHelper(new UserSettings() { Username = testUsername, Password = testPassword, Debug = "true" });
-            helper.Login();
+            LogIn();
             var options = new RequestOptions
             {
                 allycodes = new List<int>() { 999531726 },
@@ -100,7 +121,46 @@ namespace GenerateServiceClasses
             var data = helper.fetchGuildJsonString(options);
             Prepare(data, "Guild").GenerateClasses();
         }
-        
+
+        private static void GeneratePlayerUnit()
+        {
+            LogIn();
+            var options = new RequestOptions
+            {
+                allycodes = new List<int>() { 999531726 },
+                enums = true
+            };
+            var data = helper.fetchUnitJsonString(options);
+            Prepare(data, "Unit").GenerateClasses();
+        }
+
+        private static void GenerateUnit()
+        {
+            LogIn();
+
+            dynamic match = new ExpandoObject();
+            match.rarity = 7;
+
+            dynamic project = new ExpandoObject();
+            project.baseId = 7;
+            project.nameKey = 1;
+            project.descKey = 1;
+            project.forceAlignment = 1;
+            project.categoryIdList = 1;
+            project.combatType = 1;
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                language = "eng_us",
+                enums = true,
+                match = match,
+                project = project
+            };
+            var data = helper.fetchLocalizedUnitJsonString(options);
+            Prepare(data, "Unit").GenerateClasses();
+        }
+
         private static JsonClassGenerator Prepare(string jsonToParse)
         {
             return Prepare(jsonToParse, ConfigurationManager.AppSettings["MainClass"]);
