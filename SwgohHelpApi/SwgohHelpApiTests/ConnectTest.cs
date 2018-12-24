@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Dynamic;
 using NUnit.Framework;
 using SwgohHelpApi;
@@ -15,8 +16,8 @@ namespace SwgohHelpApiTests
     public class FetchTests
     {
         SwgohHelper helper;
-        private const string testUsername = "Rhialto";
-        private const string testPassword = "gm1oB4GCigeqyr0kB8G6APqjHk2DvoXXI4rfxXgo";
+        private string testUsername = ConfigurationManager.AppSettings["username"];
+        private string testPassword = ConfigurationManager.AppSettings["password"];
 
         [OneTimeSetUp]
         public void SetupTheLogin()
