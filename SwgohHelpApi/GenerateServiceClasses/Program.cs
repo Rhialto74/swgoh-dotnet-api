@@ -16,8 +16,8 @@ namespace GenerateServiceClasses
 {
     class Program
     {
-        private const string testUsername = "Rhialto";
-        private const string testPassword = "gm1oB4GCigeqyr0kB8G6APqjHk2DvoXXI4rfxXgo";
+        private static string testUsername = ConfigurationManager.AppSettings["username"];
+        private static string testPassword = ConfigurationManager.AppSettings["password"];
         private static SwgohHelper helper;
 
         public class Options
