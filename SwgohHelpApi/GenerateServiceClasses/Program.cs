@@ -10,6 +10,7 @@ using Xamasoft.JsonClassGenerator.CodeWriters;
 using SwgohHelpApi;
 using SwgohHelpApi.Model;
 using CommandLine;
+using CommandLine.Text;
 using System.Dynamic;
 
 namespace GenerateServiceClasses
@@ -36,6 +37,7 @@ namespace GenerateServiceClasses
 
             [Option('f', "filename", Default = "", Required = false, HelpText = "Parses JSON from a file. Other options are ignored when using this option.")]
             public string FileName { get; set; }
+
         }
 
         static void Main(string[] args)
@@ -56,7 +58,6 @@ namespace GenerateServiceClasses
                                GeneratePlayer();
 
                            }
-
                            if (o.Guild)
                            {
                                Console.WriteLine($"Generating Guild Classes");
@@ -72,15 +73,12 @@ namespace GenerateServiceClasses
                                Console.WriteLine($"Generating Localized Unit Classes");
                                GenerateUnit();
                            }
-                           else
-                           {
-                               Console.WriteLine($"Current Arguments: -p {o.Player}");
-                               Console.WriteLine("Quick Start Example!");
-                           }
                        }
-                       
                    });
+
+            
         }
+        
         private static void LogIn()
         {
             helper = new SwgohHelper(new UserSettings() { Username = testUsername, Password = testPassword, Debug = "true" });
@@ -89,7 +87,6 @@ namespace GenerateServiceClasses
 
         private static void GenerateFromFile(string filename)
         {
-            LogIn();
             using (StreamReader reader = File.OpenText(filename))
             {
                 var classgen = Prepare(reader.ReadToEnd());

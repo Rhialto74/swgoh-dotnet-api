@@ -107,6 +107,37 @@ namespace SwgohHelpApi
             }
         }
 
+        public static string fetchAllGearFromSwgohGGApi()
+        {
+            string ggurl = "https://swgoh.gg/api/gear/";
+            
+            try
+            {
+                var response = (ggurl).GetAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public static string fetchSpecificGearFromSwgohGGApi(string code)
+        {
+            string ggurl = "https://swgoh.gg/api/gear/" + code + "/";
+            
+            try
+            {
+                var response = (ggurl).GetAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public string fetchPlayersJsonString(RequestOptions options)
         {
             var response = this.fetchApi(ServiceUri.Player, options);
