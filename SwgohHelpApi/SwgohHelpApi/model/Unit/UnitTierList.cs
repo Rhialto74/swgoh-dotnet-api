@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace SwgohHelpApi.Model
 {
+    [JsonObject("unitTierList")]
     public class UnitTierList
     {
         public int tier { get; set; }

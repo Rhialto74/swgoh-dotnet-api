@@ -5,10 +5,12 @@ using System.Dynamic;
 using NUnit.Framework;
 using SwgohHelpApi;
 using SwgohHelpApi.Model;
+using SwgohHelpApi.Model.Crinolo;
 using Microsoft.CSharp;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+
 
 namespace SwgohHelpApiTests
 {
@@ -154,7 +156,51 @@ namespace SwgohHelpApiTests
 
             //Assert.AreEqual("basicskill_ARC170CLONESERGEANT", skillData[0].id);
         }
+        [Test]
+        public void FetchRawUnitsData()
+        {
+            dynamic match = new ExpandoObject();
+            match.rarity = 7;
 
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                language = "eng_us",
+                enums = true,
+                match = match
+            };
+            TestContext.Write(helper.fetchData(options));
+            //var unitsData = JsonConvert.DeserializeObject<List<Unit>>(helper.fetchData(options));
+
+            //Assert.AreEqual("basicskill_ARC170CLONESERGEANT", skillData[0].id);
+        }
+        [Test]
+        public void FetchSpecificUnitDataAndSerialize()
+        {
+            dynamic match = new ExpandoObject();
+            match.rarity = 7;
+            match.baseId = "B1BATTLEDROID";
+
+
+            dynamic project = new ExpandoObject();
+            project.unitTierList = new ExpandoObject() as dynamic;
+            project.unitTierList.tier = 1;
+            project.unitTierList.equipmentSetList = 1;
+
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                language = "eng_us",
+                enums = true,
+                match = match,
+                project = project
+            };
+            //TestContext.Write(helper.fetchData(options));
+            var unitTierList = JsonConvert.DeserializeObject<List<SwgohHelpApi.Model.Unit>>(helper.fetchData(options));
+            Assert.AreEqual(unitTierList[0].unitTierList[0].tier, 1);
+
+        }
         [Test]
         public void FetchLocalizedUnitsData()
         {
@@ -162,7 +208,7 @@ namespace SwgohHelpApiTests
             match.rarity = 7;
 
             dynamic project = new ExpandoObject();
-            project.baseId = 7;
+            project.baseId = 1;
             project.nameKey = 1;
             project.descKey = 1;
             project.forceAlignment = 1;
@@ -175,6 +221,27 @@ namespace SwgohHelpApiTests
                 language = "eng_us",
                 enums = true,
                 match = match,
+                project = project
+            };
+            TestContext.Write(helper.fetchData(options));
+            //var unitsData = JsonConvert.DeserializeObject<List<Unit>>(helper.fetchData(options));
+
+            //Assert.AreEqual("basicskill_ARC170CLONESERGEANT", skillData[0].id);
+        }
+
+        [Test]
+        public void FetchLocalizedGearData()
+        {
+            dynamic project = new ExpandoObject();
+            project.id = 1;
+            project.nameKey = 1;
+            
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.equipmentList,
+                language = "eng_us",
+                enums = true,
                 project = project
             };
             TestContext.Write(helper.fetchData(options));
@@ -217,6 +284,16 @@ namespace SwgohHelpApiTests
             };
             var guild = helper.fetchResults<Guild>(options);
             Assert.AreEqual("Perimeter Patrol", guild[0].Name);
+        }
+
+        //Crinolo tests
+        [Test]
+        public void FetchAllPlayerDataFromCrinolo()
+        {
+            var data = SwgohHelper.fetchAllUnitsForPlayerFromCrinolo("999531726");
+            //TestContext.Write(data);
+            var units = JsonConvert.DeserializeObject<UnitDict>(data);
+            Assert.AreEqual(units["MAGMATROOPER"].unit.Player,"Rhialto The Marvelous");
         }
     }
 }

@@ -10,7 +10,8 @@ using Newtonsoft.Json;
 using Flurl.Http;
 using Flurl.Http.Configuration;
 using SwgohHelpApi.Model;
-
+using SwgohHelpApi.Model.Crinolo;
+using Unit = SwgohHelpApi.Model.Unit;
 
 namespace SwgohHelpApi
 {
@@ -138,6 +139,38 @@ namespace SwgohHelpApi
             }
         }
 
+        public static string fetchAllUnitsForPlayerFromCrinolo(string code)
+        {
+            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/characters/player/" + code + "/?flags=withModCalc,gameStyle";
+
+            try
+            {
+                var response = (crinUrl).GetAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public static UnitDict fetchDictOfUnitsForPlayerFromCrinolo(string code)
+        {
+            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/characters/player/" + code + "/?flags=withModCalc,gameStyle";
+
+            try
+            {
+                var response = (crinUrl).GetAsync().Result;
+                return JsonConvert.DeserializeObject<UnitDict>(response.Content.ReadAsStringAsync().Result);
+
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public string fetchPlayersJsonString(RequestOptions options)
         {
             var response = this.fetchApi(ServiceUri.Player, options);
@@ -170,6 +203,30 @@ namespace SwgohHelpApi
 
             return JsonConvert.DeserializeObject<List<Player>>(response);
         }
+        public List<Unit> FetchGearTiersForUnits(string baseid)
+        {
+            dynamic match = new ExpandoObject();
+            match.rarity = 7;
+            match.baseId = baseid;
+
+
+            dynamic project = new ExpandoObject();
+            project.unitTierList = new ExpandoObject() as dynamic;
+            project.unitTierList.tier = 1;
+            project.unitTierList.equipmentSetList = 1;
+
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                language = "eng_us",
+                enums = true,
+                match = match,
+                project = project
+            };
+            
+            return JsonConvert.DeserializeObject<List<Unit>>(this.fetchData(options));
+        }
 
         public List<LocalizedUnit> FetchLocalizedUnits()
         {
@@ -177,7 +234,7 @@ namespace SwgohHelpApi
             match.rarity = 7;
 
             dynamic project = new ExpandoObject();
-            project.baseId = 7;
+            project.baseId = 1;
             project.nameKey = 1;
             project.descKey = 1;
             project.forceAlignment = 1;

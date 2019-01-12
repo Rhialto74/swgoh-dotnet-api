@@ -35,7 +35,7 @@ namespace GenerateServiceClasses
             [Option('u', "unit", Required = false, HelpText = "Generate Localized Unit Classes.")]
             public bool Unit { get; set; }
 
-            [Option('f', "filename", Default = "", Required = false, HelpText = "Parses JSON from a file. Other options are ignored when using this option.")]
+            [Option('f', "filename", Default = "", Required = false, HelpText = "Parses JSON from a file. Other options are ignored when using this option. Usage: -f C:\\PATHTOFILE\\MYFILE.JSON")]
             public string FileName { get; set; }
 
         }

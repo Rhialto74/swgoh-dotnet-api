@@ -50,10 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="modelcrinolo\Final.cs" />
+    <Compile Include="modelcrinolo\Mod.cs" />
+    <Compile Include="modelcrinolo\Mods.cs" />
+    <Compile Include="modelcrinolo\Stats.cs" />
+    <Compile Include="modelcrinolo\Unit.cs" />
+    <Compile Include="modelcrinolo\UnitDict.cs" />
     <Compile Include="modelgg\Gear.cs" />
     <Compile Include="modelgg\Ingredient.cs" />
     <Compile Include="modelgg\Recipe.cs" />
     <Compile Include="model\LocalizedUnit\LocalizedUnit.cs" />
+    <Compile Include="model\PlayerInformation.cs" />
     <Compile Include="model\Player\Char.cs" />
     <Compile Include="model\Player\Crew.cs" />
     <Compile Include="model\Player\Equipped.cs" />
