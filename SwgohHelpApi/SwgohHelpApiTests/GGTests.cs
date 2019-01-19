@@ -32,12 +32,34 @@ namespace SwgohHelpApiTests
             }
         }
 
+        public void DownloadAbilityIconsFromSwgohGG()
+        {
+            var abilities = JsonConvert.DeserializeObject<List<Ability>>(SwgohHelper.fetchAllAbilitiesFromSwgohGGApi());
+            string uri;
+            foreach (var item in abilities)
+            {
+                uri = "https:" + item.Image;
+                var indexLastSlash = uri.LastIndexOf("/");
+                var imageName = uri.Substring(indexLastSlash + 1);
+                using (WebClient client = new WebClient())
+                {
+                    client.DownloadFile(new Uri(uri), @"c:\temp-images\" + imageName);
+                }
+            }
+        }
+
         [Test]
         public void fetchSpecificGearFromGgAndDeSerializeIt()
         {
             var gear = JsonConvert.DeserializeObject<Gear>(SwgohHelper.fetchSpecificGearFromSwgohGGApi("126"));
             Assert.AreEqual(gear.Cost, 4350);
-            
+        }
+        
+        [Test]
+        public void fetchAllAbilitiesFromGgAndDeSerializeThem()
+        {
+            var abilities = JsonConvert.DeserializeObject<List<Ability>>(SwgohHelper.fetchAllAbilitiesFromSwgohGGApi());
+            Assert.AreEqual(abilities[0].CharacterBaseId, "GRIEVOUS");  
         }
     }
 }

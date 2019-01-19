@@ -60,6 +60,25 @@ namespace SwgohHelpApi
 
         }
 
+        public async Task<HttpResponseMessage> LoginAsync()
+        {
+            try
+            {
+                return await ServiceUri.SignIn.WithHeaders(new { Content_Type = "application/x-www-form-urlencoded" }).PostUrlEncodedAsync(User);
+            }
+            catch
+            {
+                throw;
+            }
+
+        }
+
+        public void LoginAsync(HttpResponseMessage cachedResponse)
+        {
+            var loginResponse = JsonConvert.DeserializeObject<LoginResponse>(cachedResponse.Content.ReadAsStringAsync().Result);
+            Token = "Bearer " + loginResponse.AccessToken + "";
+        }
+
         private string GetUriToUse(Type type)
         {
             switch(type.Name)
@@ -108,10 +127,38 @@ namespace SwgohHelpApi
             }
         }
 
+        private async Task<string> fetchApiAsync(string url, object param)
+        {
+            try
+            {
+                var response = url.WithHeaders(new { Content_Type = "application/json", Authorization = Token }).PostJsonAsync(param).Result;
+                return await response.Content.ReadAsStringAsync();
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public static string fetchAllGearFromSwgohGGApi()
         {
             string ggurl = "https://swgoh.gg/api/gear/";
             
+            try
+            {
+                var response = (ggurl).GetAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public static string fetchAllAbilitiesFromSwgohGGApi()
+        {
+            string ggurl = "https://swgoh.gg/api/abilities/";
+
             try
             {
                 var response = (ggurl).GetAsync().Result;
@@ -132,6 +179,21 @@ namespace SwgohHelpApi
                 var response = (ggurl).GetAsync().Result;
                 return response.Content.ReadAsStringAsync().Result;
 
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public static string fetchSpecificAbilityFromSwgohGGApi(string baseId)
+        {
+            string ggurl = "https://swgoh.gg/api/abilities/" + baseId + "/";
+
+            try
+            {
+                var response = (ggurl).GetAsync().Result;
+                return response.Content.ReadAsStringAsync().Result;
             }
             catch
             {
@@ -178,6 +240,11 @@ namespace SwgohHelpApi
             return response;
         }
 
+        public async Task<string> fetchPlayersJsonStringAsync(RequestOptions options)
+        {
+            return await fetchApiAsync(ServiceUri.Player, options);
+        }
+
         public string fetchGuildJsonString(RequestOptions options)
         {
             var response = this.fetchApi(ServiceUri.Guild, options);
@@ -203,6 +270,12 @@ namespace SwgohHelpApi
 
             return JsonConvert.DeserializeObject<List<Player>>(response);
         }
+
+        public async Task<string> fetchPlayersAsync(RequestOptions options)
+        {
+            return await fetchPlayersJsonStringAsync(options);
+        }
+
         public List<Unit> FetchGearTiersForUnits(string baseid)
         {
             dynamic match = new ExpandoObject();

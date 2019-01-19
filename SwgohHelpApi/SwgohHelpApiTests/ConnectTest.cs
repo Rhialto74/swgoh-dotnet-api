@@ -214,7 +214,7 @@ namespace SwgohHelpApiTests
             project.forceAlignment = 1;
             project.categoryIdList = 1;
             project.combatType = 1;
-
+            
             var options = new RequestOptions
             {
                 collection = DataEndpointConstants.unitsList,
@@ -251,6 +251,25 @@ namespace SwgohHelpApiTests
         }
 
         [Test]
+        public void FetchObtainableCharacterData()
+        {
+            dynamic match = new ExpandoObject();
+            match.obtainable = true;
+            match.obtainableTime = 0;
+
+
+            var options = new RequestOptions
+            {
+                collection = DataEndpointConstants.unitsList,
+                match = match
+            };
+            TestContext.Write(helper.fetchData(options));
+            //var unitsData = JsonConvert.DeserializeObject<List<Unit>>(helper.fetchData(options));
+
+            //Assert.AreEqual("basicskill_ARC170CLONESERGEANT", skillData[0].id);
+        }
+
+        [Test]
         public void FetchPlayerAndFindNameGeneric()
         {
             var options = new RequestOptions
@@ -267,9 +286,20 @@ namespace SwgohHelpApiTests
         {
             var options = new RequestOptions
             {
-                allycodes = new List<int>() { 999531726 },
+                allycodes = new List<int>() { 231686213 },
                 language = "eng_us",
                 enums = true
+            };
+            var data = helper.fetchPlayersJsonString(options);
+            TestContext.Write(data);
+        }
+
+        [Test]
+        public void FetchPlayerRawDataNoEnumsOrLang()
+        {
+            var options = new RequestOptions
+            {
+                allycodes = new List<int>() { 999531726 }
             };
             var data = helper.fetchPlayersJsonString(options);
             TestContext.Write(data);
