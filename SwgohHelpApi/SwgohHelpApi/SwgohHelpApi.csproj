@@ -50,15 +50,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="modelcrinolo\Equipped.cs" />
     <Compile Include="modelcrinolo\Final.cs" />
     <Compile Include="modelcrinolo\Mod.cs" />
     <Compile Include="modelcrinolo\Mods.cs" />
+    <Compile Include="modelcrinolo\PrimaryStat.cs" />
+    <Compile Include="modelcrinolo\SecondaryStat.cs" />
+    <Compile Include="modelcrinolo\Skill.cs" />
     <Compile Include="modelcrinolo\Stats.cs" />
     <Compile Include="modelcrinolo\Unit.cs" />
-    <Compile Include="modelcrinolo\UnitDict.cs" />
     <Compile Include="modelgg\Ability.cs" />
     <Compile Include="modelgg\Gear.cs" />
     <Compile Include="modelgg\Ingredient.cs" />
+    <Compile Include="modelgg\Ingredient2.cs" />
     <Compile Include="modelgg\Recipe.cs" />
     <Compile Include="model\LocalizedUnit\LocalizedUnit.cs" />
     <Compile Include="model\PlayerInformation.cs" />
@@ -102,7 +106,9 @@
     <Compile Include="UserSettings.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />

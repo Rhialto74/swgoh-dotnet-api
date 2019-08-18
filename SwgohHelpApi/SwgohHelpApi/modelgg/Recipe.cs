@@ -14,14 +14,14 @@ namespace SwgohHelpApi.Model.Gg
         [JsonProperty("base_id")]
         public string BaseId { get; set; }
 
+        [JsonProperty("result_id")]
+        public string ResultId { get; set; }
+
         [JsonProperty("cost")]
         public int Cost { get; set; }
 
         [JsonProperty("ingredients")]
         public IList<Ingredient> Ingredients { get; set; }
-
-        [JsonProperty("result_id")]
-        public string ResultId { get; set; }
     }
 
 }

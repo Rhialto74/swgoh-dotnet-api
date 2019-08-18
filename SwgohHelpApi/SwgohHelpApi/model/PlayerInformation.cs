@@ -10,7 +10,7 @@ namespace SwgohHelpApi.Model
     public class PlayerInformation
     {
         public List<string> PlayerNames { get; set; }
-        public List<UnitData> UnitStatList { get; set; }
+        public List<UnitWithStat> UnitStatList { get; set; }
         public List<Roster> RosterList { get; set; }
         public List<UnitTierList> UnitInfo { get; set; }
     }

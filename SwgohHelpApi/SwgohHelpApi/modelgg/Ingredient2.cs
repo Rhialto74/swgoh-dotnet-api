@@ -8,14 +8,14 @@ using Newtonsoft.Json.Linq;
 namespace SwgohHelpApi.Model.Gg
 {
 
-    public class Ingredient
+    public class Ingredient2
     {
-
-        [JsonProperty("amount")]
-        public int Amount { get; set; }
 
         [JsonProperty("gear")]
         public string Gear { get; set; }
+
+        [JsonProperty("amount")]
+        public int Amount { get; set; }
     }
 
 }

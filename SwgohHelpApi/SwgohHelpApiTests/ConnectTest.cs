@@ -325,5 +325,13 @@ namespace SwgohHelpApiTests
             //var units = JsonConvert.DeserializeObject<UnitDict>(data);
             //Assert.AreEqual(units["MAGMATROOPER"].unit.Player,"Rhialto The Marvelous");
         }
+
+        [Test]
+        public void FetchListOfAllPlayerDataFromCrinolo()
+        {
+            var units = SwgohHelper.fetchListOfUnitsForPlayerFromCrinolo("999531726");
+            Assert.AreEqual(units[0].NameKey, "Magmatrooper");
+        }
+
     }
 }

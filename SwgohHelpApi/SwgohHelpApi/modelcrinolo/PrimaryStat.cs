@@ -8,14 +8,14 @@ using Newtonsoft.Json.Linq;
 namespace SwgohHelpApi.Model.Crinolo
 {
 
-    public class Stats
+    public class PrimaryStat
     {
 
-        [JsonProperty("final")]
-        public Final Final { get; set; }
+        [JsonProperty("unitStat")]
+        public int UnitStat { get; set; }
 
-        [JsonProperty("mods")]
-        public Mods Mods { get; set; }
+        [JsonProperty("value")]
+        public double Value { get; set; }
     }
 
 }

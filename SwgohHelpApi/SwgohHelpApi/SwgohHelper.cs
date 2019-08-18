@@ -203,7 +203,7 @@ namespace SwgohHelpApi
 
         public static string fetchAllUnitsForPlayerFromCrinolo(string code)
         {
-            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/characters/player/" + code + "/?flags=withModCalc,gameStyle";
+            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/player/" + code + "/characters?flags=withModCalc,gameStyle";
 
             try
             {
@@ -217,15 +217,14 @@ namespace SwgohHelpApi
             }
         }
 
-        public static UnitDict fetchDictOfUnitsForPlayerFromCrinolo(string code)
+        public static List<UnitWithStat> fetchListOfUnitsForPlayerFromCrinolo(string code)
         {
-            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/characters/player/" + code + "/?flags=withModCalc,gameStyle";
+            string crinUrl = "https://crinolo-swgoh.glitch.me/statCalc/api/player/" + code + "/characters?flags=withModCalc,gameStyle";
 
             try
             {
                 var response = (crinUrl).GetAsync().Result;
-                return JsonConvert.DeserializeObject<UnitDict>(response.Content.ReadAsStringAsync().Result);
-
+                return JsonConvert.DeserializeObject<List<UnitWithStat>>(response.Content.ReadAsStringAsync().Result);
             }
             catch
             {

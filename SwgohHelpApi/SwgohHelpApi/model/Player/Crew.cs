@@ -24,7 +24,7 @@ namespace SwgohHelpApi.Model
         public int Gp { get; set; }
 
         [JsonProperty("cp")]
-        public int Cp { get; set; }
+        public double Cp { get; set; }
     }
 
 }

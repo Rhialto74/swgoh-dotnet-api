@@ -14,20 +14,26 @@ namespace SwgohHelpApi.Model.Crinolo
         [JsonProperty("id")]
         public string Id { get; set; }
 
-        [JsonProperty("set")]
-        public int Set { get; set; }
-
         [JsonProperty("level")]
         public int Level { get; set; }
-
-        [JsonProperty("pips")]
-        public int Pips { get; set; }
 
         [JsonProperty("tier")]
         public int Tier { get; set; }
 
-        [JsonProperty("stat")]
-        public IList<IList<double>> Stat { get; set; }
+        [JsonProperty("slot")]
+        public int Slot { get; set; }
+
+        [JsonProperty("set")]
+        public int Set { get; set; }
+
+        [JsonProperty("pips")]
+        public int Pips { get; set; }
+
+        [JsonProperty("primaryStat")]
+        public PrimaryStat PrimaryStat { get; set; }
+
+        [JsonProperty("secondaryStat")]
+        public IList<SecondaryStat> SecondaryStat { get; set; }
     }
 
 }

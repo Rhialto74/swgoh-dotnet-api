@@ -16,18 +16,18 @@ namespace SwgohHelpApiTests
     [TestFixture]
     class GGTests
     {
+        [Test]
         public void DownloadIconsFromSwgohGG()
         {
-            var gear = SwgohHelper.fetchAllGearFromSwgohGGApi();
+            var gear = JsonConvert.DeserializeObject<List<Gear>>(SwgohHelper.fetchAllGearFromSwgohGGApi());
             string uri;
-            foreach (dynamic item in gear)
+            foreach (var item in gear)
             {
-                uri = "https:" + item.image;
-                var indexLastSlash = uri.LastIndexOf("/");
-                var imageName = uri.Substring(indexLastSlash + 1);
+                uri = "https://swgoh.gg" + item.Image;
+                var imageName = item.BaseId;
                 using (WebClient client = new WebClient())
                 {
-                    client.DownloadFile(new Uri(uri), @"d:\temp-images\" + imageName);
+                    client.DownloadFile(new Uri(uri), @"f:\temp-images\" + imageName + ".png");
                 }
             }
         }
@@ -38,9 +38,8 @@ namespace SwgohHelpApiTests
             string uri;
             foreach (var item in abilities)
             {
-                uri = "https:" + item.Image;
-                var indexLastSlash = uri.LastIndexOf("/");
-                var imageName = uri.Substring(indexLastSlash + 1);
+                uri = "https://swgoh.gg" + item.Image;
+                var imageName = item.BaseId + ".png";
                 using (WebClient client = new WebClient())
                 {
                     client.DownloadFile(new Uri(uri), @"c:\temp-images\" + imageName);
